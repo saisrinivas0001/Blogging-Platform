@@ -36,13 +36,13 @@ public class BlogService {
 		return blogs;
 	}
 	
-	public List<Blog> getAllBlogsByUser(Long userId){
+	public List<Blog> getAllBlogsByUserId(Long userId){
 		List<Blog> blogs = repo.findByAuthorId(userId);
 		return blogs;
 	}
 	
-	public Blog updateBlog(Blog blog) {
-		Optional<Blog> optBlog = repo.findById(blog.getId());
+	public Blog updateBlog(Long id, Blog blog) {
+		Optional<Blog> optBlog = repo.findById(id);
 		if(optBlog.isPresent()) {
 			Blog update = optBlog.get();
 			update.setTitle(blog.getTitle());
@@ -51,7 +51,7 @@ public class BlogService {
 			update.setStatus(blog.getStatus());
 			return repo.save(update);
 		}else {
-			throw new BlogNotFoundException("Blog id "  + blog.getId() + " is not found..!");
+			throw new BlogNotFoundException("Blog id "  + id + " is not found..!");
 		}
 	}
 	

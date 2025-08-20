@@ -38,8 +38,8 @@ public class UserService {
 		return repo.findAll();
 	}
 	
-	public User updateUser(User user) {
-		Optional<User> optUser = repo.findById(user.getId());
+	public User updateUser(Long id, User user) {
+		Optional<User> optUser = repo.findById(id);
 		if(optUser.isPresent()) {
 			User update = optUser.get();
 			update.setEmail(user.getEmail());
@@ -48,7 +48,7 @@ public class UserService {
 			update.setRole(user.getRole());
 			return repo.save(update);
 		}else {
-			throw new UserNotFoundException("User id " + user.getId() + " is not found..!");
+			throw new UserNotFoundException("User id " + id + " is not found..!");
 		}
 	}
 	
