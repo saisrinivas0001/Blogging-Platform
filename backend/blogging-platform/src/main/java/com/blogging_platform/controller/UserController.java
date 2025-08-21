@@ -1,4 +1,4 @@
-package com.blogging_platform.blog;
+package com.blogging_platform.controller;
 
 import java.util.List;
 
@@ -14,47 +14,76 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogging_platform.User.User;
+import com.blogging_platform.User.UserService;
+import com.blogging_platform.blog.Blog;
+import com.blogging_platform.blog.BlogService;
 
 @RestController
-@RequestMapping("/api/blog")
-public class BlogController {
+@RequestMapping("/api/user")
+public class UserController {
 	
 	@Autowired
-	private BlogService service;
+	private UserService userService;
 	
-	@PostMapping("/")
+	@Autowired
+	private BlogService blogService;
+	
+	
+	//blog-endpoints
+	@PostMapping("/blog/")
 	public ResponseEntity<Blog> createBlog(@RequestBody Blog blog){
-		Blog savedBlog = service.createBlog(blog);
+		Blog savedBlog = blogService.createBlog(blog);
 		return new ResponseEntity<>(savedBlog, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/blog/{id}")
 	public ResponseEntity<Blog> getBlogById(@PathVariable Long id){
-		Blog blog = service.getBlogById(id);
+		Blog blog = blogService.getBlogById(id);
 		return new ResponseEntity<>(blog, HttpStatus.OK);
 	}
 	
-	@GetMapping("/all")
+	@GetMapping("/blog/all")
 	public ResponseEntity<List<Blog>> getAllBlogs(){
-		List<Blog> blogs = service.getAllBlogs();
+		List<Blog> blogs = blogService.getAllBlogs();
 		return new ResponseEntity<>(blogs, HttpStatus.OK);
 	}
 	
-	@GetMapping("/user/{id}")
+	@GetMapping("/blog/user/{id}")
 	public ResponseEntity<List<Blog>> getAllBlogsByUserId(@PathVariable Long id){
-		List<Blog> blogs = service.getAllBlogsByUserId(id);
+		List<Blog> blogs = blogService.getAllBlogsByUserId(id);
 		return new ResponseEntity<>(blogs, HttpStatus.OK);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/blog/{id}")
 	public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody Blog blog){
-		Blog updateBlog = service.updateBlog(id, blog);
+		Blog updateBlog = blogService.updateBlog(id, blog);
 		return new ResponseEntity<>(updateBlog, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/blog/{id}")
 	public ResponseEntity<Void> deleteBlogById(@PathVariable Long id){
-		service.deleteBlogById(id);
+		blogService.deleteBlogById(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	
+	//user-endpoints
+	@PutMapping("/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
+		User updatedUser = userService.updateUser(id, user);
+		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
+		userService.deleteUser(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/")
+	public ResponseEntity<User> registerUser(@RequestBody User user){
+		User savedUser = userService.registerUser(user);
+		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
 	}
 }
