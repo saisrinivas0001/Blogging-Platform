@@ -1,4 +1,4 @@
-package com.blogging_platform.jwt;
+package com.blogging_platform.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
