@@ -1,5 +1,7 @@
 package com.blogging_platform.User;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,16 @@ public class CustomUserDetailsService implements UserDetailsService{
 															.roles(user.getRole().name())
 															.build();
 	}
+	
+	
+	public List<User> getAllUsers(){
+		return userRepository.findAll();
+	}
+	
+	public void deleteUserById(Long id) {
+		userRepository.deleteById(id);
+	}
+	
 	
 
 
