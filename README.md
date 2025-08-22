@@ -1,4 +1,4 @@
-# Blogging-Platform Backend
+# Blogging-Platform
 
 This is the backend component of the **Blogging-Platform** project, developed using **Spring Boot**. It provides a secure RESTful API for managing users and blog posts, including authentication, authorization, and content management.
 
