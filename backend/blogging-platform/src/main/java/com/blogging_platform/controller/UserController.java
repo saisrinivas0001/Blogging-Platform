@@ -45,11 +45,6 @@ public class UserController {
 		return new ResponseEntity<>(blogs, HttpStatus.OK);
 	}
 	
-	@GetMapping("/blog/user/{id}")
-	public ResponseEntity<List<Blog>> getAllBlogsByUserId(@PathVariable Long id){
-		List<Blog> blogs = blogService.getAllBlogsByUserId(id);
-		return new ResponseEntity<>(blogs, HttpStatus.OK);
-	}
 	
 	@PutMapping("/blog/{id}")
 	public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody Blog blog){

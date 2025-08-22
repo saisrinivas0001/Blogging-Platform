@@ -44,20 +44,19 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request){
-		Optional<User> opt = userRepo.findUserByUsername(request.getUsername());
-		if(opt.isPresent()) {
-			return new ResponseEntity<>("User Already Exist..!", HttpStatus.BAD_REQUEST);
-		}else {
-			User user = opt.get();
-			user.setUsername(request.getUsername());
-			user.setPassword(passwordEncoder.encode(request.getPassword()));
-			user.setRole(Role.USER);
-			user.setEmail(request.getEmail());
-			
-			userRepo.save(user);
-			
-			return ResponseEntity.ok("User Register Successfully..!");
-		}
+	    Optional<User> opt = userRepo.findUserByUsername(request.getUsername());
+	    if(!opt.isPresent()) {
+	        User user = new User();
+	        user.setUsername(request.getUsername());
+	        user.setPassword(passwordEncoder.encode(request.getPassword()));
+	        user.setRole(Role.USER);
+	        user.setEmail(request.getEmail());
+	        
+	        userRepo.save(user);
+	        return ResponseEntity.ok("User Register Successfully..!");
+	    } else {
+	        return new ResponseEntity<>("User Already Exist..!", HttpStatus.BAD_REQUEST);
+	    }
 	}
 	
 	@PostMapping("/login")

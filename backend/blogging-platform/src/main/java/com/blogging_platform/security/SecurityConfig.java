@@ -11,16 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.blogging_platform.User.CustomUserDetailsService;
+import com.blogging_platform.security.jwt.JwtAuthFilter;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	
+	
 	@Autowired
-	private CustomUserDetailsService customUserDetailsService;
+	private JwtAuthFilter jwtAuthFilter;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -29,15 +31,19 @@ public class SecurityConfig {
 	
 	
 	@Bean
-	public SecurityFilterChain config(HttpSecurity http) throws Exception{
-		http.csrf().disable()
-			.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/api/admin/**").hasRole("ADMIN")
-					.requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
-					.anyRequest().authenticated())
-			.httpBasic();
-		
-		return http.build();
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http.csrf().disable()
+	    		.cors()
+	    		.and()
+	        .authorizeHttpRequests()
+	            .requestMatchers("/auth/register", "/auth/login").permitAll()
+	            .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "USER")
+	            .requestMatchers("/api/user/**").hasRole("USER")
+	            .anyRequest().authenticated()
+	        .and()
+	        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+	    return http.build();
 	}
 	
 	
